@@ -101,5 +101,98 @@ namespace ventas_JoseAngel.Controllers
             }
             return "Producto registrado con exito!!";
         }
+
+        [HttpPut]
+        public async Task<ActionResult<string>> UpdateProducto(Productos producto)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand();
+            string mensaje;
+
+            try
+            {
+                cmd.CommandText = "updateProducto";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("Id", producto.Id);
+                cmd.Parameters.AddWithValue("Nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("Descripcion", producto.Descripcion);
+                cmd.Parameters.AddWithValue("Precio", producto.Precio);
+
+                cmd.Connection = conn;
+
+                await conn.OpenAsync();
+
+                int i = await cmd.ExecuteNonQueryAsync();
+
+                if (i > 0)
+                {
+                    mensaje = "Producto Editado con Exito";
+                }
+                else
+                {
+                    mensaje = "No hay un producto con el Id proporsionado";
+                }
+
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return mensaje;
+        }
+        [HttpDelete]
+        public async Task<ActionResult<string>> DeleteProducto(int Id)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand();
+            string mensaje;
+
+            try
+            {
+                cmd.CommandText = "deleteProducto";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("Id", Id);
+               
+
+                cmd.Connection = conn;
+
+                await conn.OpenAsync();
+
+                int i = await cmd.ExecuteNonQueryAsync();
+
+                if (i > 0)
+                {
+                    mensaje = "Producto Eliminado con Exito";
+                }
+                else
+                {
+                    mensaje = "No hay un producto con el Id proporsionado";
+                }
+
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return mensaje;
+        }
     }
 }
