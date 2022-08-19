@@ -62,5 +62,44 @@ namespace ventas_JoseAngel.Controllers
             }
             return productos;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateProducto(Productos nuevoProducto)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand();
+            
+
+            try
+            {
+                cmd.CommandText = "createProducto";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("Nombre", nuevoProducto.Nombre);
+                cmd.Parameters.AddWithValue("Descripcion", nuevoProducto.Descripcion);
+                cmd.Parameters.AddWithValue("Precio", nuevoProducto.Precio);
+
+                cmd.Connection = conn;
+
+                await conn.OpenAsync();
+
+                await cmd.ExecuteNonQueryAsync();
+                
+               
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return "Producto registrado con exito!!";
+        }
     }
 }
